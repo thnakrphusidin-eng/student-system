@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Student System | ระบบบริการนักเรียน</title>
+<style>
+:root{--blue:#2878d7;--deep:#174b88;--pale:#edf6ff;--ink:#20334b;--muted:#718198;--line:#dce8f5;--white:#fff;--green:#16865b;--red:#c74747}
+*{box-sizing:border-box}body{margin:0;background:#f5f9fe;color:var(--ink);font-family:Tahoma,Arial,sans-serif;line-height:1.6}
+header{background:linear-gradient(120deg,#eaf5ff,#fff);border-bottom:1px solid var(--line)}
+.wrap{width:min(1080px,92%);margin:auto}.top{padding:34px 0 28px;display:flex;justify-content:space-between;align-items:center;gap:20px}
+.brand{display:flex;align-items:center;gap:13px}.logo{width:48px;height:48px;border-radius:15px;background:#d8ebff;color:var(--blue);display:grid;place-items:center;font-size:25px;font-weight:bold}
+h1{font-size:clamp(23px,4vw,34px);margin:0;color:#183d69}.subtitle{margin:4px 0 0;color:var(--muted);font-size:14px}
+.status{font-size:12px;color:var(--green);background:#e8f8f0;padding:7px 12px;border-radius:30px;white-space:nowrap}
+main{padding:28px 0 55px}.intro{margin-bottom:22px}.intro h2{margin:0 0 5px;font-size:21px}.intro p{margin:0;color:var(--muted)}
+.tabs{display:flex;gap:9px;overflow-x:auto;padding:4px 2px 15px}.tab{border:1px solid var(--line);background:#fff;color:#526780;padding:10px 15px;border-radius:12px;white-space:nowrap;cursor:pointer;font-size:14px;transition:.2s}.tab.active,.tab:hover{background:var(--blue);color:#fff;border-color:var(--blue)}
+.panel{display:none;background:#fff;border:1px solid var(--line);border-radius:20px;padding:clamp(18px,3vw,30px);box-shadow:0 10px 30px rgba(36,91,150,.06)}.panel.active{display:block}
+.panel-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:20px}.panel h3{margin:0;font-size:21px;color:#1c4779}.tag{font-size:12px;background:var(--pale);color:var(--blue);padding:5px 10px;border-radius:20px;white-space:nowrap}
+.desc{color:var(--muted);margin:5px 0 0;font-size:14px}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.field{display:flex;flex-direction:column;gap:7px}.field label{font-size:14px;font-weight:bold}.field input,.field select{width:100%;padding:12px 13px;border:1px solid #ccdaea;border-radius:11px;font:inherit;color:#20334b;background-color:#fff;caret-color:#2878d7;outline:none;-webkit-text-fill-color:#20334b}.field input::placeholder{color:#718198;opacity:1}.field select option{color:#20334b;background:#fff}.field input:-webkit-autofill{-webkit-text-fill-color:#20334b;box-shadow:0 0 0 1000px #fff inset}.field input:focus,.field select:focus{border-color:var(--blue);box-shadow:0 0 0 3px #e7f2ff}
+.btn{border:0;border-radius:11px;background:var(--blue);color:#fff;padding:11px 18px;font-size:14px;cursor:pointer;font-weight:bold;margin-top:17px}.btn:hover{background:var(--deep)}.result{margin-top:18px;background:#f2f8ff;border:1px solid #d9eaff;border-radius:13px;padding:15px;min-height:54px}.result strong{color:#174b88}.success{color:var(--green);font-weight:bold}.fail{color:var(--red);font-weight:bold}
+.note{font-size:13px;color:var(--muted);margin-top:12px}.code-toggle{margin-top:17px;border:1px solid var(--line);background:white;color:#315d8e;padding:9px 13px;border-radius:10px;cursor:pointer}.code{display:none;margin-top:12px;background:#14243a;color:#dcecff;padding:16px;border-radius:12px;overflow:auto;font:13px/1.6 Consolas,monospace;white-space:pre}
+.checks{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:14px}.check{display:flex;gap:9px;align-items:center;padding:12px;border:1px solid var(--line);border-radius:11px;font-size:14px}.check input{accent-color:var(--blue);width:17px;height:17px}
+.menu-list{display:grid;gap:8px;margin:15px 0}.menu-item{background:#f5f9ff;border:1px solid var(--line);border-radius:10px;padding:10px 13px;font-size:14px}
+footer{text-align:center;color:#8a9aae;font-size:12px;padding:20px}
+@media(max-width:650px){.top{align-items:flex-start}.status{display:none}.grid,.checks{grid-template-columns:1fr}.panel-head{flex-direction:column}.tabs{margin-right:-4%}}
+</style>
+</head>
+<body>
+<header><div class="wrap top">
+  <div class="brand"><div class="logo">S</div><div><h1>STUDENT SYSTEM</h1><p class="subtitle">ระบบทดลองโปรแกรมและบริการนักเรียน</p></div></div>
+  <span class="status">● พร้อมใช้งาน</span>
+</div></header>
+<main class="wrap">
+  <div class="intro"><h2>ยินดีต้อนรับสู่ระบบการเรียนรู้</h2><p>เลือกใบงานที่ต้องการทดลอง กรอกข้อมูล แล้วกดปุ่มเพื่อดูผลลัพธ์</p></div>
+  <nav class="tabs" aria-label="เมนูใบงาน">
+    <button class="tab active" data-tab="exam">01 ผลการสอบ</button>
+    <button class="tab" data-tab="grade">02 ระดับผลการเรียน</button>
+    <button class="tab" data-tab="discount">03 ส่วนลด</button>
+    <button class="tab" data-tab="lab">04 สิทธิ์เข้าห้องแล็บ</button>
+    <button class="tab" data-tab="service">05 เมนูบริการ</button>
+  </nav>
+
+  <section class="panel active" id="exam">
+    <div class="panel-head"><div><h3>โปรแกรมตรวจสอบผลการสอบ</h3><p class="desc">กำหนดคะแนนตั้งแต่ 50 คะแนนขึ้นไปเป็น PASS</p></div><span class="tag">If - Else</span></div>
+    <div class="grid"><div class="field"><label for="examScore">คะแนนสอบ (0–100)</label><input id="examScore" type="number" min="0" max="100" value="75"></div></div>
+    <button class="btn" onclick="checkExam()">ตรวจสอบผลสอบ</button>
+    <div class="result" id="examResult" aria-live="polite">ผลลัพธ์จะแสดงที่นี่</div>
+    <button class="code-toggle" onclick="toggleCode('code1')">ดูตัวอย่างโค้ด Java</button><pre class="code" id="code1">int score = 75;
+
+if (score >= 50) {
+    System.out.println("Result: PASS");
+} else {
+    System.out.println("Result: FAIL");
+}</pre>
+  </section>
+
+  <section class="panel" id="grade">
+    <div class="panel-head"><div><h3>โปรแกรมคำนวณระดับผลการเรียน</h3><p class="desc">แปลผลคะแนนตามเกณฑ์ระดับ A ถึง F</p></div><span class="tag">Else If</span></div>
+    <div class="grid"><div class="field"><label for="gradeScore">คะแนนสอบ (0–100)</label><input id="gradeScore" type="number" min="0" max="100" value="85"></div></div>
+    <button class="btn" onclick="checkGrade()">คำนวณเกรด</button>
+    <div class="result" id="gradeResult" aria-live="polite">ผลลัพธ์จะแสดงที่นี่</div>
+    <p class="note">เกณฑ์: 80–100 A · 75–79 B+ · 70–74 B · 65–69 C+ · 60–64 C · 55–59 D+ · 50–54 D · 0–49 F</p>
+    <button class="code-toggle" onclick="toggleCode('code2')">ดูตัวอย่างโค้ด Java</button><pre class="code" id="code2">int score = 85;
+String grade;
+
+if (score >= 80) grade = "A";
+else if (score >= 75) grade = "B+";
+else if (score >= 70) grade = "B";
+else if (score >= 65) grade = "C+";
+else if (score >= 60) grade = "C";
+else if (score >= 55) grade = "D+";
+else if (score >= 50) grade = "D";
+else grade = "F";
+
+System.out.println("Grade: " + grade);</pre>
+  </section>
+
+  <section class="panel" id="discount">
+    <div class="panel-head"><div><h3>โปรแกรมตรวจสอบสิทธิ์ส่วนลด</h3><p class="desc">ซื้อสินค้าตั้งแต่ 1,000 บาทขึ้นไป รับส่วนลด 10%</p></div><span class="tag">Ternary Operator</span></div>
+    <div class="grid"><div class="field"><label for="price">ราคาสินค้า (บาท)</label><input id="price" type="number" min="0" step="0.01" value="1500"></div></div>
+    <button class="btn" onclick="checkDiscount()">คำนวณส่วนลด</button>
+    <div class="result" id="discountResult" aria-live="polite">ผลลัพธ์จะแสดงที่นี่</div>
+    <button class="code-toggle" onclick="toggleCode('code3')">ดูตัวอย่างโค้ด Java</button><pre class="code" id="code3">double price = 1500.0;
+boolean eligible = price >= 1000;
+double discount = eligible ? price * 0.10 : 0;
+double netPrice = price - discount;
+
+System.out.println("Discount: " + discount);
+System.out.println("Net Price: " + netPrice);</pre>
+  </section>
+
+  <section class="panel" id="lab">
+    <div class="panel-head"><div><h3>โปรแกรมตรวจสอบสิทธิ์เข้าห้องปฏิบัติการ</h3><p class="desc">ต้องมีบัตรและเป็นนักเรียนปัจจุบัน พร้อมได้รับอนุมัติจากครูหรือเป็นผู้ดูแลแล็บ</p></div><span class="tag">Nested If + Logical</span></div>
+    <div class="checks">
+      <label class="check"><input type="checkbox" id="card" checked> มีบัตรนักเรียน</label>
+      <label class="check"><input type="checkbox" id="active" checked> เป็นนักเรียนปัจจุบัน</label>
+      <label class="check"><input type="checkbox" id="approved" checked> ครูอนุมัติ</label>
+      <label class="check"><input type="checkbox" id="admin"> เป็นผู้ดูแลห้องแล็บ</label>
+    </div>
+    <button class="btn" onclick="checkLab()">ตรวจสอบสิทธิ์</button>
+    <div class="result" id="labResult" aria-live="polite">ผลลัพธ์จะแสดงที่นี่</div>
+    <button class="code-toggle" onclick="toggleCode('code4')">ดูตัวอย่างโค้ด Java</button><pre class="code" id="code4">if (hasStudentCard && isActiveStudent) {
+    if (isTeacherApproved || isLabAdmin) {
+        System.out.println("Access Granted");
+    } else {
+        System.out.println("Access Denied");
+    }
+} else {
+    System.out.println("Access Denied");
+}</pre>
+  </section>
+
+  <section class="panel" id="service">
+    <div class="panel-head"><div><h3>โปรแกรมระบบเลือกเมนูบริการ</h3><p class="desc">เลือกหมายเลขเมนูเพื่อดูรายการบริการ</p></div><span class="tag">Switch Case</span></div>
+    <div class="menu-list">
+      <div class="menu-item">1. Student Information — ตรวจสอบข้อมูลนักเรียน</div>
+      <div class="menu-item">2. Exam Scores — ตรวจสอบคะแนนสอบ</div>
+      <div class="menu-item">3. Class Schedule — ตรวจสอบตารางเรียน</div>
+      <div class="menu-item">4. Contact Teacher — ติดต่อครูผู้สอน</div>
+      <div class="menu-item">5. Exit — ออกจากระบบ</div>
+    </div>
+    <div class="grid"><div class="field"><label for="menu">หมายเลขเมนู</label><select id="menu"><option value="1">1 — Student Information</option><option value="2">2 — Exam Scores</option><option value="3" selected>3 — Class Schedule</option><option value="4">4 — Contact Teacher</option><option value="5">5 — Exit</option></select></div></div>
+    <button class="btn" onclick="selectMenu()">ยืนยันเมนู</button>
+    <div class="result" id="menuResult" aria-live="polite">ผลลัพธ์จะแสดงที่นี่</div>
+    <button class="code-toggle" onclick="toggleCode('code5')">ดูตัวอย่างโค้ด Java</button><pre class="code" id="code5">int menu = 3;
+
+switch (menu) {
+    case 1:
+        System.out.println("You selected Student Information.");
+        break;
+    case 2:
+        System.out.println("You selected Exam Scores.");
+        break;
+    case 3:
+        System.out.println("You selected Class Schedule.");
+        break;
+    case 4:
+        System.out.println("You selected Contact Teacher.");
+        break;
+    case 5:
+        System.out.println("You selected Exit.");
+        break;
+    default:
+        System.out.println("Invalid Menu.");
+}</pre>
+  </section>
+</main>
+<footer>STUDENT SYSTEM · แบบฝึกหัดการเขียนโปรแกรม Java</footer>
+<script>
+const $ = id => document.getElementById(id);
+function validScore(id){const n=Number($(id).value);if($(id).value.trim()===''||!Number.isFinite(n)||n<0||n>100){return null}return n}
+function checkExam(){const s=validScore('examScore');$('examResult').innerHTML=s===null?'<span class="fail">กรุณากรอกคะแนนระหว่าง 0–100</span>':`Score: <strong>${s}</strong><br>Result: <span class="${s>=50?'success':'fail'}">${s>=50?'PASS':'FAIL'}</span>`}
+function checkGrade(){const s=validScore('gradeScore');let g='';if(s===null){$('gradeResult').innerHTML='<span class="fail">กรุณากรอกคะแนนระหว่าง 0–100</span>';return}if(s>=80)g='A';else if(s>=75)g='B+';else if(s>=70)g='B';else if(s>=65)g='C+';else if(s>=60)g='C';else if(s>=55)g='D+';else if(s>=50)g='D';else g='F';$('gradeResult').innerHTML=`Score: <strong>${s}</strong><br>Grade: <strong>${g}</strong>`}
+function money(n){return n.toLocaleString('th-TH',{minimumFractionDigits:2,maximumFractionDigits:2})}
+function checkDiscount(){const raw=$('price').value,p=Number(raw);if(raw.trim()===''||!Number.isFinite(p)||p<0){$('discountResult').innerHTML='<span class="fail">กรุณากรอกราคาที่ถูกต้อง</span>';return}const eligible=p>=1000,d=eligible?p*.1:0;$('discountResult').innerHTML=`Product Price: <strong>${money(p)} บาท</strong><br>Discount Status: <strong>${eligible?'Eligible':'Not Eligible'}</strong><br>Discount: <strong>${money(d)} บาท</strong><br>Net Price: <strong>${money(p-d)} บาท</strong>`}
+function checkLab(){const card=$('card').checked,active=$('active').checked,approved=$('approved').checked,admin=$('admin').checked;const granted=card&&active&&(approved||admin);$('labResult').innerHTML=`Student Card: ${card}<br>Active Student: ${active}<br>Teacher Approved: ${approved}<br>Lab Admin: ${admin}<br><br><span class="${granted?'success':'fail'}">${granted?'Access Granted':'Access Denied'}</span>`}
+function selectMenu(){const names={1:'Student Information',2:'Exam Scores',3:'Class Schedule',4:'Contact Teacher',5:'Exit'};const n=Number($('menu').value);$('menuResult').innerHTML=`Selected Menu: <strong>${n}</strong><br>You selected <strong>${names[n]}</strong>.`}
+function toggleCode(id){const el=$(id);el.style.display=el.style.display==='block'?'none':'block'}
+document.querySelectorAll('.tab').forEach(btn=>btn.addEventListener('click',()=>{document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('active',b===btn));document.querySelectorAll('.panel').forEach(p=>p.classList.toggle('active',p.id===btn.dataset.tab))}));
+checkExam();checkGrade();checkDiscount();checkLab();selectMenu();
+</script>
+</body></html>
